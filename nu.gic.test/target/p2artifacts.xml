@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<?artifactRepository version='1.1.0'?>
+<artifacts size='1'>
+  <artifact classifier='osgi.bundle' id='nu.gic.test' version='1.0.0.201607131605'>
+    <properties size='5'>
+      <property name='artifact.size' value='19256'/>
+      <property name='download.size' value='19256'/>
+      <property name='maven-groupId' value='example.group'/>
+      <property name='maven-artifactId' value='nu.gic.test'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+    </properties>
+  </artifact>
+</artifacts>

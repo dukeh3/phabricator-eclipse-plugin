@@ -1,0 +1,33 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<units size='1'>
+  <unit id='nu.gic.test' version='1.0.0.201607131605'>
+    <update id='nu.gic.test' range='[0.0.0,1.0.0.201607131605)' severity='0'/>
+    <properties size='4'>
+      <property name='org.eclipse.equinox.p2.name' value='Test'/>
+      <property name='maven-groupId' value='example.group'/>
+      <property name='maven-artifactId' value='nu.gic.test'/>
+      <property name='maven-version' value='1.0.0-SNAPSHOT'/>
+    </properties>
+    <provides size='3'>
+      <provided namespace='org.eclipse.equinox.p2.iu' name='nu.gic.test' version='1.0.0.201607131605'/>
+      <provided namespace='osgi.bundle' name='nu.gic.test' version='1.0.0.201607131605'/>
+      <provided namespace='org.eclipse.equinox.p2.eclipse.type' name='bundle' version='1.0.0'/>
+    </provides>
+    <requires size='3'>
+      <required namespace='osgi.bundle' name='org.eclipse.core.runtime' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='org.eclipse.ui' range='0.0.0'/>
+      <required namespace='osgi.bundle' name='conduit-osgi' range='0.0.0'/>
+    </requires>
+    <artifacts size='1'>
+      <artifact classifier='osgi.bundle' id='nu.gic.test' version='1.0.0.201607131605'/>
+    </artifacts>
+    <touchpoint id='org.eclipse.equinox.p2.osgi' version='1.0.0'/>
+    <touchpointData size='1'>
+      <instructions size='1'>
+        <instruction key='manifest'>
+          Bundle-SymbolicName: nu.gic.test;singleton:=true&#xA;Bundle-Version: 1.0.0.201607131605&#xA;
+        </instruction>
+      </instructions>
+    </touchpointData>
+  </unit>
+</units>
