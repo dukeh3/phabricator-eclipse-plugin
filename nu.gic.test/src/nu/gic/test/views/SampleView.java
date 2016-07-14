@@ -1,15 +1,23 @@
 package nu.gic.test.views;
 
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.part.*;
+import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.phabricator.conduit.ConduitException;
 import org.phabricator.conduit.raw.Conduit;
 import org.phabricator.conduit.raw.ConduitFactory;
+import org.phabricator.conduit.raw.ManiphestModule.GetTaskTransactionsResult;
 import org.phabricator.conduit.raw.UserModule.UserResult;
 
 import nu.gic.test.views.IssuesTree.Project;
@@ -25,6 +33,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.core.internal.runtime.Activator;
 import org.eclipse.core.runtime.IAdaptable;
 
 /**
@@ -70,7 +79,7 @@ public class SampleView extends ViewPart {
 	// public void setParent(TreeParent parent) {
 	// this.parent = parent;
 	// }
-	//
+	// Activator.getImageDescriptor
 	// public TreeParent getParent() {
 	// return parent;
 	// }
@@ -113,7 +122,7 @@ public class SampleView extends ViewPart {
 
 	class ViewContentProvider implements ITreeContentProvider {
 
-//		IssuesTree it;
+		// IssuesTree it;
 
 		// private TreeParent invisibleRoot;
 
@@ -215,45 +224,55 @@ public class SampleView extends ViewPart {
 		// root.addChild(p1);
 		// root.addChild(p2);
 		//
-		// invisibleRoot = new TreeParent("");
+		// invisibleRoot = new TreeParent("");				}
+		
 		// invisibleRoot.addChild(root);
 		// }
 	}
 
-//	class ViewLabelProvider extends LabelProvider {
-//
-//		public String getColumnText(Object obj, int index) {
-//			System.out.println("SampleView.ViewLabelProvider.getColumnText()" + obj);
-//
-//			return getText(obj);
-//		}
-//
-//		public Image getColumnImage(Object obj, int index) {
-//			System.out.println("SampleView.ViewLabelProvider.getColumnImage()" + obj);
-//
-//			return getImage(obj);
-//		}
-//
-//		public String getText(Object obj) {
-//
-//			System.out.println("SampleView.ViewLabelProvider.getText()" + obj);
-//
-//			return obj.toString();
-//		}
-//
-//		public Image getImage(Object obj) {
-//			String imageKey = ISharedImages.IMG_OBJ_ELEMENT;
-//			// if (obj instanceof TreeParent)
-//			// imageKey = ISharedImages.IMG_OBJ_FOLDER;
-//			return PlatformUI.getWorkbench().getSharedImages().getImage(imageKey);
-//		}
-//	}
+	// class ViewLabelProvider extends LabelProvider {
+	//
+	// public String getColumnText(Object obj, int index) {
+	// System.out.println("SampleView.ViewLabelProvider.getColumnText()" + obj);
+	//
+	// return getText(obj);
+	// }
+	//
+	// public Image getColumnImage(Object obj, int index) {
+	// System.out.println("SampleView.ViewLabelProvider.getColumnImage()" +
+	// obj);
+	//
+	// return getImage(obj);
+	// }
+	//
+	// public String getText(Object obj) {
+	//
+	// System.out.println("SampleView.ViewLabelProvider.getText()" + obj);
+	//
+	// return obj.toString();
+	// }
+	//
+	// public Image getImage(Object obj) {
+	// String imageKey = ISharedImages.IMG_OBJ_ELEMENT;
+	// // if (obj instanceof TreeParent)
+	// // imageKey = ISharedImages.IMG_OBJ_FOLDER;
+	// return PlatformUI.getWorkbench().getSharedImages().getImage(imageKey);
+	// }
+	// }
 
 	/**
 	 * The constructor.
 	 */
+	Image image;
+
 	public SampleView() {
+
+		// image = AbstractUIPlugin.imageDescriptorFromPlugin("Test",
+		// "icons/32/notepad_ok_32.png").createImage();
+
 	}
+	
+	
 
 	/**
 	 * This is a callback that will allow us to create the viewer and initialize
@@ -274,7 +293,8 @@ public class SampleView extends ViewPart {
 		// m_treeViewer.setInput(cities);
 		// m_treeViewer.expandAll();
 
-//		viewer = new TreeViewer(addressTree, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL);
+		// viewer = new TreeViewer(addressTree, SWT.MULTI | SWT.H_SCROLL |
+		// SWT.V_SCROLL);
 		viewer = new TreeViewer(addressTree);
 		drillDownAdapter = new DrillDownAdapter(viewer);
 
@@ -293,15 +313,13 @@ public class SampleView extends ViewPart {
 		column3.setWidth(35);
 		TreeColumn column4 = new TreeColumn(addressTree, SWT.RIGHT);
 		column4.setAlignment(SWT.LEFT);
-		column4.setText("Done");
+		column4.setText("Modified");
 		column4.setWidth(35);
-
-		
 
 		viewer.setContentProvider(new ViewContentProvider());
 
 		viewer.setInput(it);
-//		viewer.setLabelProvider(new ViewLabelProvider());
+		// viewer.setLabelProvider(new ViewLabelProvider());
 		viewer.setLabelProvider(new TableLabelProvider());
 
 		// Create the help context id for the viewer's control
@@ -312,58 +330,124 @@ public class SampleView extends ViewPart {
 		hookDoubleClickAction();
 		contributeToActionBars();
 	}
-	
-	 class TableLabelProvider implements ITableLabelProvider{
-		 
-			public String getColumnText(Object obj, int index) {
-				System.out.println("SampleView.ViewLabelProvider.getColumnText()" + obj);
 
-				return getText(obj);
+	class TableLabelProvider implements ITableLabelProvider {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
+		Map<String, Image> stateMap = new HashMap<>();
+
+		public TableLabelProvider() {
+			stateMap.put("open",
+					AbstractUIPlugin.imageDescriptorFromPlugin("nu.gic.test", "icons/32/notepad_32.png").createImage());
+
+			stateMap.put("resolved", AbstractUIPlugin
+					.imageDescriptorFromPlugin("nu.gic.test", "icons/32/notepad_ok_32.png").createImage());
+
+			stateMap.put("wontfix", AbstractUIPlugin
+					.imageDescriptorFromPlugin("nu.gic.test", "icons/32/notepad_cancel_32.png").createImage());
+
+			stateMap.put("invalid", AbstractUIPlugin
+					.imageDescriptorFromPlugin("nu.gic.test", "icons/32/notepad_close_32.png").createImage());
+
+			stateMap.put("duplicate", AbstractUIPlugin
+					.imageDescriptorFromPlugin("nu.gic.test", "icons/32/notepad_add_32.png").createImage());
+
+			stateMap.put("spite", AbstractUIPlugin
+					.imageDescriptorFromPlugin("nu.gic.test", "icons/32/notepad_delete_32.png").createImage());
+		}
+
+		public String getColumnText(Object obj, int index) {
+			System.out.println("SampleView.ViewLabelProvider.getColumnText()" + obj);
+
+			if (obj instanceof Task) {
+				Task t = (Task) obj;
+
+				switch (index) {
+				case 0:
+					return t.tr.getTitle();
+
+				case 1:
+					String ownerPHID = t.tr.getOwnerPHID();
+					return ownerPHID != null ? it.userMap.get(ownerPHID).ur.getRealName() : "None";
+
+				case 2:
+					return sdf.format(new Date(1000 * Long.parseLong(t.tr.getDateCreated())));
+
+				case 3:
+					return sdf.format(new Date(1000 * Long.parseLong(t.tr.getDateModified())));
+
+				default:
+					return "";
+				}
+
 			}
 
-			public Image getColumnImage(Object obj, int index) {
-				System.out.println("SampleView.ViewLabelProvider.getColumnImage()" + obj);
+			if (obj instanceof Project) {
+				Project p = (Project) obj;
 
-				return index == 0 ? getImage(obj) : null;
+				switch (index) {
+				case 0:
+					return p.pr.getName();
+
+				default:
+					return "";
+				}
 			}
 
-			public String getText(Object obj) {
+			return getText(obj);
+		}
 
-				System.out.println("SampleView.ViewLabelProvider.getText()" + obj);
+		public Image getColumnImage(Object obj, int index) {
+			System.out.println("SampleView.ViewLabelProvider.getColumnImage()" + obj);
 
-				return obj.toString();
+			return index == 0 ? getImage(obj) : null;
+		}
+
+		public String getText(Object obj) {
+
+			System.out.println("SampleView.ViewLabelProvider.getText()" + obj);
+
+			return obj.toString();
+		}
+
+		public Image getImage(Object obj) {
+
+			if (obj instanceof Task) {
+				Task t = (Task) obj;
+				return stateMap.get(t.tr.getStatus());
 			}
 
-			public Image getImage(Object obj) {
-				String imageKey = ISharedImages.IMG_OBJ_ELEMENT;
-				// if (obj instanceof TreeParent)
-				// imageKey = ISharedImages.IMG_OBJ_FOLDER;
-				return PlatformUI.getWorkbench().getSharedImages().getImage(imageKey);
-			}
-		 
-		 
-//	      public Image getColumnImage(Object element, int columnIndex){
-//	         return null;
-//	      }
-//	 
-//	      public String getColumnText(Object element, int columnIndex){
-//	         return null;
-//	      }
-	 
-	      public void addListener(ILabelProviderListener listener){
-	      }
-	 
-	      public void dispose(){
-	      }
-	 
-	      public boolean isLabelProperty(Object element, String property){
-	         return false;
-	      }
-	 
-	      public void removeListener(ILabelProviderListener listener){
-	      }
-	   }		
-	
+			return AbstractUIPlugin.imageDescriptorFromPlugin("nu.gic.test", "icons/32/briefcase_32.png").createImage();
+			//
+			//
+			// String imageKey = ISharedImages.IMG_OBJ_ELEMENT;
+			// // if (obj instanceof TreeParent)
+			// // imageKey = ISharedImages.IMG_OBJ_FOLDER;
+			// return
+			// PlatformUI.getWorkbench().getSharedImages().getImage(imageKey);
+		}
+
+		// public Image getColumnImage(Object element, int columnIndex){
+		// return null;
+		// }
+		//
+		// public String getColumnText(Object element, int columnIndex){
+		// return null;
+		// }
+
+		public void addListener(ILabelProviderListener listener) {
+		}
+
+		public void dispose() {
+		}
+
+		public boolean isLabelProperty(Object element, String property) {
+			return false;
+		}
+
+		public void removeListener(ILabelProviderListener listener) {
+		}
+	}
 
 	private void hookContextMenu() {
 		MenuManager menuMgr = new MenuManager("#PopupMenu");
@@ -429,8 +513,30 @@ public class SampleView extends ViewPart {
 		doubleClickAction = new Action() {
 			public void run() {
 				ISelection selection = viewer.getSelection();
-				Object obj = ((IStructuredSelection) selection).getFirstElement();
-				showMessage("Double-click detected on " + obj.toString());
+
+				for (Object obj : ((IStructuredSelection) selection).toList()) {
+
+					showMessage("Double-click detected on " + obj.toString());
+
+					if (obj instanceof Task) {
+						Task t = (Task) obj;
+
+						// showMessage("Double-click detected on " +
+						// t.tr.getUri());
+						System.out.println(t.tr.getUri());
+
+						try {
+							PlatformUI.getWorkbench().getBrowserSupport().createBrowser(null)
+									.openURL(new URL(t.tr.getUri()));
+						} catch (PartInitException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						} catch (MalformedURLException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
 			}
 		};
 	}
@@ -441,27 +547,6 @@ public class SampleView extends ViewPart {
 		viewer.addDoubleClickListener(new IDoubleClickListener() {
 			public void doubleClick(DoubleClickEvent event) {
 				doubleClickAction.run();
-
-				Control control = viewer.getControl();
-
-				String baseUrl = "http://ph.labs.h3.se";
-				String apiToken = "api-fgzgm3c7opso7z42auep5abfw47x";
-				Conduit conduit = ConduitFactory.createConduit(baseUrl, apiToken);
-
-				MessageDialog.openInformation(control.getShell(), "Bundle", "Hello, Eclipse world");
-
-				try {
-					for (UserResult ur : conduit.user.query(null, null, null, null, null, null, null)) {
-						MessageDialog.openInformation(control.getShell(), "Bundle",
-								"Hello, Eclipse world " + ur.getRealName());
-					}
-				} catch (ConduitException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-
-				MessageDialog.openInformation(control.getShell(), "Bundle", ">");
-
 			}
 		});
 	}

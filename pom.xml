@@ -17,6 +17,7 @@
 	<properties>
 		<tycho-version>0.25.0</tycho-version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<java.version>1.8</java.version>
 	</properties>
 
 
@@ -66,25 +67,17 @@
 				<version>${tycho-version}</version>
 				<extensions>true</extensions>
 			</plugin>
-			<!-- 
-			<plugin>
-				<groupId>org.eclipse.tycho</groupId>
-				<artifactId>target-platform-configuration</artifactId>
-				<version>${tycho-version}</version>
-				<configuration>
-					<pomDependencies>consider</pomDependencies>
-				</configuration>
-			</plugin>
-			-->
+			<!-- <plugin> <groupId>org.eclipse.tycho</groupId> <artifactId>target-platform-configuration</artifactId> 
+				<version>${tycho-version}</version> <configuration> <pomDependencies>consider</pomDependencies> 
+				</configuration> </plugin> -->
 		</plugins>
 	</build>
-<!-- 	
- -->
-    <dependencies>
+	<!-- -->
+	<dependencies>
 		<dependency>
 			<groupId>org.phabricator</groupId>
 			<artifactId>conduit-osgi</artifactId>
 			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
- </project>
+</project>
