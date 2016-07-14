@@ -14,6 +14,7 @@ import org.phabricator.conduit.raw.ConduitFactory;
 import org.phabricator.conduit.raw.ManiphestModule.TaskResult;
 import org.phabricator.conduit.raw.ProjectModule.ProjectResult;
 import org.phabricator.conduit.raw.ProjectModule.QueryResult;
+import org.phabricator.conduit.raw.UserModule.UserResult;
 
 public class IssuesTree {
 
@@ -26,6 +27,12 @@ public class IssuesTree {
 			return col == 0 ? PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT)
 					: null;
 		}
+	}
+	
+	static class User {
+
+		public UserResult ur;
+		
 	}
 
 	static class Task extends Avatar {
@@ -53,6 +60,7 @@ public class IssuesTree {
 
 	Map<String, Project> projMap = new HashMap<>();
 	Map<String, Task> taskMap = new HashMap<>();
+	Map<String, User> userMap = new HashMap<>();
 
 	public IssuesTree() {
 	}
@@ -99,6 +107,15 @@ public class IssuesTree {
 				for (String taskPhid : t.tr.getDependsOnTaskPHIDs()) {
 					taskMap.get(taskPhid).blocks.add(t);
 				}
+			}
+			
+			org.phabricator.conduit.raw.UserModule.QueryResult qr3 = conduit.user.query(null, null, null, null, null, null, null);
+			
+			for (UserResult ur : qr3) {
+				User u = new User();
+				u.ur = ur;
+				
+				userMap.put(ur.getPhid(), u);
 			}
 
 		} catch (ConduitException e) {
