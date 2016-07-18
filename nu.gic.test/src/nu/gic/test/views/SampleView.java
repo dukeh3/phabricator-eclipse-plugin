@@ -494,12 +494,13 @@ public class SampleView extends ViewPart {
 		action1 = new Action() {
 			public void run() {
 				showMessage("Action 1 executed");
+				it.init();
+				viewer.refresh();
 			}
 		};
 		action1.setText("Action 1");
-		action1.setToolTipText("Action 1 tooltip");
-		action1.setImageDescriptor(
-				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+		action1.setImageDescriptor(AbstractUIPlugin
+				.imageDescriptorFromPlugin("nu.gic.test", "icons/32/reload_32.png"));
 
 		action2 = new Action() {
 			public void run() {
@@ -516,14 +517,8 @@ public class SampleView extends ViewPart {
 
 				for (Object obj : ((IStructuredSelection) selection).toList()) {
 
-					showMessage("Double-click detected on " + obj.toString());
-
 					if (obj instanceof Task) {
 						Task t = (Task) obj;
-
-						// showMessage("Double-click detected on " +
-						// t.tr.getUri());
-						System.out.println(t.tr.getUri());
 
 						try {
 							PlatformUI.getWorkbench().getBrowserSupport().createBrowser(null)

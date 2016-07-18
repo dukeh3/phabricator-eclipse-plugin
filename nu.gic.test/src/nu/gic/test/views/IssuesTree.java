@@ -28,11 +28,11 @@ public class IssuesTree {
 					: null;
 		}
 	}
-	
+
 	static class User {
 
 		public UserResult ur;
-		
+
 	}
 
 	static class Task extends Avatar {
@@ -58,9 +58,9 @@ public class IssuesTree {
 		}
 	}
 
-	Map<String, Project> projMap = new HashMap<>();
-	Map<String, Task> taskMap = new HashMap<>();
-	Map<String, User> userMap = new HashMap<>();
+	Map<String, Project> projMap;
+	Map<String, Task> taskMap;
+	Map<String, User> userMap;
 
 	public IssuesTree() {
 	}
@@ -74,6 +74,10 @@ public class IssuesTree {
 		String apiToken = "api-kyirxoio6fn74ihksug2cazi3sqj";
 
 		Conduit conduit = ConduitFactory.createConduit(baseUrl, apiToken);
+
+		projMap = new HashMap<>();
+		taskMap = new HashMap<>();
+		userMap = new HashMap<>();
 
 		try {
 
@@ -108,13 +112,14 @@ public class IssuesTree {
 					taskMap.get(taskPhid).blocks.add(t);
 				}
 			}
-			
-			org.phabricator.conduit.raw.UserModule.QueryResult qr3 = conduit.user.query(null, null, null, null, null, null, null);
-			
+
+			org.phabricator.conduit.raw.UserModule.QueryResult qr3 = conduit.user.query(null, null, null, null, null,
+					null, null);
+
 			for (UserResult ur : qr3) {
 				User u = new User();
 				u.ur = ur;
-				
+
 				userMap.put(ur.getPhid(), u);
 			}
 
