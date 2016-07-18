@@ -6,27 +6,24 @@
          point="org.eclipse.ui.views">
       <category
             name="Sample Category"
-            id="nu.gic.test">
+            id="nu.gic.zil">
       </category>
       <view
             name="Sample View"
             icon="icons/sample.gif"
-            category="nu.gic.test"
+            category="nu.gic.zil"
             class="nu.gic.test.views.SampleView"
             id="nu.gic.test.views.SampleView">
+      </view>
+      <view
+            class="nu.gic.test.ViewPart1"
+            id="nu.gic.test.view1"
+            name="ZoolView"
+            restorable="true">
       </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension
-            targetID="org.eclipse.jdt.ui.JavaPerspective">
-         <view
-               ratio="0.5"
-               relative="org.eclipse.ui.views.ProblemView"
-               relationship="right"
-               id="nu.gic.test.views.SampleView">
-         </view>
-      </perspectiveExtension>
    </extension>
    <extension
          point="org.eclipse.help.contexts">

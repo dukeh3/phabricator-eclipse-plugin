@@ -1,4 +1,4 @@
-package nu.gic.test.views;
+package nu.gic.test;
 
 import java.util.ArrayList;
 import java.util.HashMap;
