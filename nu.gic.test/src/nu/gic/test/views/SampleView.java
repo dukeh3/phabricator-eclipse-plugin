@@ -4,6 +4,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -18,6 +19,8 @@ import org.phabricator.conduit.ConduitException;
 import org.phabricator.conduit.raw.Conduit;
 import org.phabricator.conduit.raw.ConduitFactory;
 import org.phabricator.conduit.raw.ManiphestModule.GetTaskTransactionsResult;
+import org.phabricator.conduit.raw.ManiphestModule.InfoResult;
+import org.phabricator.conduit.raw.ManiphestModule.QueryResult;
 import org.phabricator.conduit.raw.UserModule.UserResult;
 
 import nu.gic.test.views.IssuesTree.Project;
@@ -493,7 +496,7 @@ public class SampleView extends ViewPart {
 	private void makeActions() {
 		action1 = new Action() {
 			public void run() {
-				showMessage("Action 1 executed");
+//				showMessage("Action 1 executed");
 				it.init();
 				viewer.refresh();
 			}
@@ -505,12 +508,44 @@ public class SampleView extends ViewPart {
 		action2 = new Action() {
 			public void run() {
 				showMessage("Action 2 executed");
+				
+				ISelection selection = viewer.getSelection();
+				for (Object obj : ((IStructuredSelection) selection).toList()) {
+					System.out.println(obj);
+					
+					if (obj instanceof Task) {
+						Task t = (Task) obj;
+						
+						System.out.println(t.tr.getPhid());
+						
+						try {
+							List<String> phids = Arrays.asList(new String[]{ t.tr.getPhid() });
+							
+							QueryResult qr = it.conduit.maniphest.query(null, phids, null, null, null, null, null, null, null, null, null);
+							
+							t.tr = qr.values().iterator().next();
+							
+							viewer.update(t, null);
+							
+						} catch (ConduitException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						
+					}
+					
+					
+				}				
 			}
 		};
+		
 		action2.setText("Action 2");
 		action2.setToolTipText("Action 2 tooltip");
 		action2.setImageDescriptor(
 				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+		
+		
+		
 		doubleClickAction = new Action() {
 			public void run() {
 				ISelection selection = viewer.getSelection();

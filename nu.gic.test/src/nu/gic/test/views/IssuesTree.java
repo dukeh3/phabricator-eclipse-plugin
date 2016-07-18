@@ -44,7 +44,6 @@ public class IssuesTree {
 		public String toString() {
 			return tr.getTitle();
 		}
-
 	}
 
 	public static class Project extends Avatar {
@@ -61,6 +60,7 @@ public class IssuesTree {
 	Map<String, Project> projMap;
 	Map<String, Task> taskMap;
 	Map<String, User> userMap;
+	Conduit conduit;
 
 	public IssuesTree() {
 	}
@@ -73,7 +73,7 @@ public class IssuesTree {
 		String baseUrl = "http://p.gic.nu";
 		String apiToken = "api-kyirxoio6fn74ihksug2cazi3sqj";
 
-		Conduit conduit = ConduitFactory.createConduit(baseUrl, apiToken);
+		conduit = ConduitFactory.createConduit(baseUrl, apiToken);
 
 		projMap = new HashMap<>();
 		taskMap = new HashMap<>();
