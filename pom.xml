@@ -24,6 +24,7 @@
 	<modules>
 		<module>eclipse-repository</module>
 		<module>example-bundle</module>
+		<module>nu.gic.test</module>		
 		<module>example-feature</module>
 		<module>neon</module>
 	</modules>
