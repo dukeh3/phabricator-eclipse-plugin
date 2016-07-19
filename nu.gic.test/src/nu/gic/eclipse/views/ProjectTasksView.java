@@ -1,28 +1,4 @@
-package nu.gic.test;
-
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.part.ViewPart;
-
-//public class ViewPart1 extends ViewPart {
-//
-//	public ViewPart1() {
-//		// TODO Auto-generated constructor stub
-//	}
-//
-//	@Override
-//	public void createPartControl(Composite parent) {
-//		// TODO Auto-generated method stub
-//
-//	}
-//
-//	@Override
-//	public void setFocus() {
-//		// TODO Auto-generated method stub
-//
-//	}
-//
-//}
-//
+package nu.gic.eclipse.views;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -44,8 +20,8 @@ import org.phabricator.conduit.raw.ConduitFactory;
 import org.phabricator.conduit.raw.ManiphestModule.GetTaskTransactionsResult;
 import org.phabricator.conduit.raw.UserModule.UserResult;
 
-import nu.gic.test.IssuesTree.Task;
-import nu.gic.test.IssuesTree.Project;
+import nu.gic.eclipse.views.IssuesTree.Project;
+import nu.gic.eclipse.views.IssuesTree.Task;
 
 import org.eclipse.jface.viewers.*;
 import org.eclipse.swt.graphics.Image;
@@ -75,12 +51,12 @@ import org.eclipse.core.runtime.IAdaptable;
  * <p>
  */
 
-public class ViewPart1 extends ViewPart {
+public class ProjectTasksView extends ViewPart {
 
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "nu.gic.test.view1";
+	public static final String ID = "nu.gic.eclipse.views.ProjectTasksView";
 
 	private TreeViewer viewer;
 	private DrillDownAdapter drillDownAdapter;
@@ -289,7 +265,7 @@ public class ViewPart1 extends ViewPart {
 	 */
 	Image image;
 
-	public ViewPart1() {
+	public ProjectTasksView() {
 
 		// image = AbstractUIPlugin.imageDescriptorFromPlugin("Test",
 		// "icons/32/notepad_ok_32.png").createImage();
@@ -478,7 +454,7 @@ public class ViewPart1 extends ViewPart {
 		menuMgr.setRemoveAllWhenShown(true);
 		menuMgr.addMenuListener(new IMenuListener() {
 			public void menuAboutToShow(IMenuManager manager) {
-				ViewPart1.this.fillContextMenu(manager);
+				ProjectTasksView.this.fillContextMenu(manager);
 			}
 		});
 		Menu menu = menuMgr.createContextMenu(viewer.getControl());
@@ -581,4 +557,3 @@ public class ViewPart1 extends ViewPart {
 		viewer.getControl().setFocus();
 	}
 }
-

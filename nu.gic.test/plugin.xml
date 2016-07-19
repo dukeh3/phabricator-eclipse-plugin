@@ -9,11 +9,11 @@
             id="nu.gic.zil">
       </category>
       <view
-            name="Sample View"
+            name="ProjectTasksView"
             icon="icons/sample.gif"
             category="nu.gic.zil"
-            class="nu.gic.test.views.SampleView"
-            id="nu.gic.test.views.SampleView">
+            class="nu.gic.eclipse.views.ProjectTasksView"
+            id="nu.gic.eclipse.views.ProjectTasksView">
       </view>
       <view
             class="nu.gic.test.ViewPart1"
